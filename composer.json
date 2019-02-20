@@ -1,7 +1,7 @@
 {
     "name": "jzaaa/cake-captcha",
     "description": "CakePHP3 Captcha Package",
-    "keywords": ["CakePHP5 Captcha", "CakePHP", "Captcha"],
+    "keywords": ["CakePHP3 Captcha", "CakePHP", "Captcha"],
     "license": "MIT",
     "authors": [
         {
