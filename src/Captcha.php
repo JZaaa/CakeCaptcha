@@ -2,6 +2,7 @@
 
 namespace JZaaa\CakeCaptcha;
 
+use Cake\Core\Configure;
 use Cake\Http\Session;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
@@ -74,6 +75,7 @@ class Captcha
     public function __construct($config = [])
     {
         $this->configure($config);
+
         $this->init();
     }
 
@@ -97,6 +99,12 @@ class Captcha
     protected function configure($config)
     {
         $ignore = ['captchaBuilder', 'phraseBuilder', 'session'];
+
+        $defaultConfig = Configure::read('captcha.config');
+
+        if (is_array($defaultConfig)) {
+            $config = array_merge($defaultConfig, $config);
+        }
 
         foreach ($config as $key => $item) {
             if (isset($this->$key) && !in_array($key, $ignore)) {
@@ -178,7 +186,6 @@ class Captcha
 
     public function img()
     {
-        header('Content-type: image/jpeg');
         $this->captchaBuilder->output();
     }
 
@@ -192,6 +199,10 @@ class Captcha
     {
         $phrase = $this->session->read($this->sessionKey);
 
+        if (is_null($phrase)) {
+            return false;
+        }
+
         if (!$this->sensitive) {
             $value = strtolower($value);
         }
@@ -204,9 +215,4 @@ class Captcha
         return $result;
     }
 
-
-    public function read()
-    {
-        return $this->session->read($this->sessionKey);
-    }
 }
