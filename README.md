@@ -66,6 +66,10 @@ public function check()
         $userCode = $this->request->getData('userCode');
         
         if (!empty($userCode)) {
+            // 若出现 `Session was already started` 错误，可加入下行代码
+            // $this->getRequest()->getSession()->start();
+            // in CakePHP versions before 3.6/3.5
+            // $this->request->session()->start();
             $captcha = new Captcha();
             if ($captcha->check($userCode)) {
                 // valid
