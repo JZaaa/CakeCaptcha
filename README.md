@@ -18,7 +18,7 @@ composer require jzaaa/cake-captcha
 bin/cake plugin load JZaaa/CakeCaptcha --routes --bootstrap
 ```
 或
-```
+```php
 // src/Application.php
 public function bootstrap()
 {
@@ -28,7 +28,7 @@ public function bootstrap()
 ```
 ## 配置
 创建`config/captcha.php`文件配置插件：
-```
+```php
 <?php
 return [
     'captcha' => [
@@ -48,7 +48,7 @@ return [
 
 ## 使用
 in `*.ctp` 视图文件：
-```
+```php
  
 <?php $captcha = $this->Url->build('/jzaaa/cake-captcha')?>
 
@@ -56,7 +56,7 @@ in `*.ctp` 视图文件：
 
 ```
 in `Controller` 控制器文件：
-```
+```php
 use JZaaa\CakeCaptcha\Captcha;
 
 // 检测验证码是否合法
