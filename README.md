@@ -1,10 +1,10 @@
 CakeCaptcha
 ============
-CakePHP3 验证码插件
+CakePHP 验证码插件
 
 ## Requires
-- php: >=5.6
-- cakephp/cakephp: ^3.6
+- php: >=5.6 <8.0
+- cakephp/cakephp: ^3.10 | ^4.3
 - [gregwar/captcha: ^1.1](https://github.com/Gregwar/Captcha)
 
 ## 安装
@@ -67,9 +67,7 @@ public function check()
         
         if (!empty($userCode)) {
             // 若出现 `Session was already started` 错误，可加入下行代码
-            // $this->getRequest()->getSession()->start();
-            // in CakePHP versions before 3.6/3.5
-            // $this->request->session()->start();
+            // $this->request->getRequest()->start();
             $captcha = new Captcha();
             if ($captcha->check($userCode)) {
                 // valid
