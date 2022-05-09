@@ -37,7 +37,7 @@ return [
             'width' => 150, // 验证码图像宽
             'height' => 40, // 验证码图像高
             'sensitive' => false, // 是否对大小写敏感
-            'sessionKey' => 'captcha', // 存储session key 
+            'sessionKey' => 'captcha', // 存储session key
             'length' => 4, // 验证码长度
             'charset' => '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ' // 验证码字符集
         ]
@@ -49,7 +49,7 @@ return [
 ## 使用
 in `*.ctp` 视图文件：
 ```php
- 
+
 <?php $captcha = $this->Url->build('/jzaaa/cake-captcha')?>
 
 <img src="<?php echo $captcha?>" onclick="this.src='<?php echo $captcha . '?'?>' + Math.random()" style="cursor: pointer;">
@@ -64,18 +64,18 @@ public function check()
 {
     if ($this->request->is('post')) {
         $userCode = $this->request->getData('userCode');
-        
+
         if (!empty($userCode)) {
-            // 若出现 `Session was already started` 错误，可加入下行代码
-            // $this->request->getRequest()->start();
-            $captcha = new Captcha();
+            $captcha = new Captcha([
+                'session' => $this->request->getSession()
+            ]);
             if ($captcha->check($userCode)) {
                 // valid
-            } else {
-                // invalid
             }
+        } else {
+                // invalid
         }
-        
+
     }
 }
 
