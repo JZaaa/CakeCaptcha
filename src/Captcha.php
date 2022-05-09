@@ -82,7 +82,7 @@ class Captcha
     protected function init()
     {
         if ($this->session instanceof Session) {
-            $this->session;
+              throw new InternalErrorException('session bad');
         }
         $this->session = new Session();
 
