@@ -15,7 +15,9 @@ class CaptchaController extends AppController
         $this->viewBuilder()->setLayout(false);
         $this->autoRender = false;
 
-        $captcha = new Captcha();
+        $captcha = new Captcha([
+            'session' => $this->request->getSession()
+        ]);
         $captcha->create();
 
         header('Content-type: image/jpeg');
