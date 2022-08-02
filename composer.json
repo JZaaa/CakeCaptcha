@@ -8,16 +8,10 @@
             "name": "jzaaa"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/JZaaa/Captcha"
-        }
-    ],
     "require": {
     	"php": ">=5.6.0",
         "cakephp/cakephp": "^3.10|^4.3",
-        "gregwar/captcha": "dev-captcha-fixed"
+        "gregwar/captcha": "^1.1"
     },
     "autoload": {
         "psr-4": {
