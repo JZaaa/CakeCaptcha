@@ -81,10 +81,12 @@ class Captcha
 
     protected function init()
     {
-        if ($this->session instanceof Session) {
-            $this->session;
+        if (!$this->session instanceof Session) {
+            $this->session = new Session();
         }
-        $this->session = new Session();
+        if (!$this->session->started()) {
+            $this->session->start();
+        }
 
         if (!$this->sensitive) {
             $this->charset = strtolower($this->charset);
