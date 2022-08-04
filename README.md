@@ -2,6 +2,8 @@ CakeCaptcha
 ============
 CakePHP 验证码插件，支持PHP8.1
 
+CakePHP3 请使用 [v1版本](https://github.com/JZaaa/CakeCaptcha/tree/v1)
+
 ## Requires
 - php: >=7.4
 - cakephp/cakephp: ^4.4
@@ -47,7 +49,7 @@ return [
 或者在`config/app.php`中添加配置项
 
 ## 使用
-in `*.ctp` 视图文件：
+in `*.php` 视图文件：
 ```php
 
 <?php $captcha = $this->Url->build('/jzaaa/cake-captcha')?>
