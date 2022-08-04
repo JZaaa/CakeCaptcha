@@ -121,7 +121,7 @@ class Captcha
     protected function initCaptcha()
     {
         if (!$this->phraseBuilder) {
-            $this->phraseBuilder = Builder::buildPhrase($this->length, $this->charset);
+            $this->phraseBuilder = Builder::buildPhrase((int) $this->length, $this->charset);
         }
         if (!$this->captchaBuilder) {
             $this->captchaBuilder = new Builder($this->phraseBuilder);
@@ -141,7 +141,7 @@ class Captcha
          */
         $this->captchaBuilder->interpolate = false;
 
-        $this->captchaBuilder->build($this->width, $this->height);
+        $this->captchaBuilder->build((int) $this->width,(int) $this->height);
 
         $this->phrase = $this->captchaBuilder->phrase;
 
