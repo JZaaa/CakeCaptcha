@@ -139,7 +139,7 @@ class Captcha
         /**
          * 由于PHP8.1错误，这里关闭插值功能，等待插件修复
          */
-        $this->captchaBuilder->interpolate = false;
+//        $this->captchaBuilder->interpolate = false;
 
         $this->captchaBuilder->build((int) $this->width,(int) $this->height);
 
