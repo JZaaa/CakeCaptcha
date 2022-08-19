@@ -7,7 +7,7 @@ CakePHP3 请使用 [v1版本](https://github.com/JZaaa/CakeCaptcha/tree/v1)
 ## Requires
 - php: >=7.4
 - cakephp/cakephp: ^4.4
-- [s1syphos/php-simple-captcha: ^2.2](https://codeberg.org/S1SYPHOS/php-simple-captcha)
+- [s1syphos/php-simple-captcha: ^2.2.1](https://codeberg.org/S1SYPHOS/php-simple-captcha)
 
 ## 安装
 
