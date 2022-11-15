@@ -68,6 +68,12 @@ class Captcha
     protected $phraseBuilder;
 
     /**
+     * 后期效果
+     * @var bool $applyPostEffects
+     */
+    protected $applyPostEffects = true;
+
+    /**
      * Captcha constructor.
      * @param array $config
      */
@@ -136,10 +142,7 @@ class Captcha
     {
         $this->initCaptcha();
 
-        /**
-         * 由于PHP8.1错误，这里关闭插值功能，等待插件修复
-         */
-//        $this->captchaBuilder->interpolate = false;
+        $this->captchaBuilder->applyPostEffects = $this->applyPostEffects;
 
         $this->captchaBuilder->build((int) $this->width,(int) $this->height);
 

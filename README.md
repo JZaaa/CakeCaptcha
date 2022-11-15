@@ -41,7 +41,8 @@ return [
             'sensitive' => false, // 是否对大小写敏感
             'sessionKey' => 'captcha', // 存储session key
             'length' => 4, // 验证码长度
-            'charset' => '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ' // 验证码字符集
+            'charset' => '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ', // 验证码字符集
+            'applyPostEffects' => true, // 是否应用后期效果
         ]
     ]
 ];
