@@ -17,7 +17,7 @@ composer require jzaaa/cake-captcha
 
 ## 开启CakePHP插件
 ```
-bin/cake plugin load JZaaa/CakeCaptcha --routes --bootstrap
+bin/cake plugin load JZaaa/CakeCaptcha
 ```
 或
 ```php
