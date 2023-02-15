@@ -10,6 +10,9 @@ return [
             'length' => 4, // 验证码长度
             'charset' => '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ', // 验证码字符集
             'applyPostEffects' => true, // 是否应用后期效果
+            'bgColor' => null, // 图片背景色
+            'lineColor' => null, // 干扰线颜色
+            'textColor' => null, // 文字颜色
         ]
     ]
 ];

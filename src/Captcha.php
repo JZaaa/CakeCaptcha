@@ -73,6 +73,25 @@ class Captcha
      */
     protected $applyPostEffects = true;
 
+
+    /**
+     * 图片背景色
+     * @var null|string|array $bgColor
+     */
+    protected $bgColor = null;
+
+    /**
+     * 文字颜色
+     * @var null|string|array $bgColor
+     */
+    protected $lineColor = null;
+
+    /**
+     * 文字颜色
+     * @var null|string|array $bgColor
+     */
+    protected $textColor = null;
+
     /**
      * Captcha constructor.
      * @param array $config
@@ -112,10 +131,10 @@ class Captcha
         if (is_array($defaultConfig)) {
             $config = array_merge($defaultConfig, $config);
         }
-
+        $classVars = array_keys(get_class_vars(get_class($this)));
 
         foreach ($config as $key => $item) {
-            if (isset($this->$key) && !in_array($key, $ignore)) {
+            if (in_array($key, $classVars) && !in_array($key, $ignore)) {
                 $this->$key = $item;
             }
         }
@@ -143,6 +162,17 @@ class Captcha
         $this->initCaptcha();
 
         $this->captchaBuilder->applyPostEffects = $this->applyPostEffects;
+
+        if ($this->bgColor) {
+            $this->captchaBuilder->bgColor = $this->bgColor;
+        }
+        if ($this->lineColor) {
+            $this->captchaBuilder->lineColor = $this->lineColor;
+        }
+        if ($this->textColor) {
+            $this->captchaBuilder->textColor = $this->textColor;
+        }
+
 
         $this->captchaBuilder->build((int) $this->width,(int) $this->height);
 
