@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace JZaaa\CakeCaptcha;
 
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Http\MiddlewareQueue;
@@ -26,6 +27,13 @@ class Plugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
+        $config = 'captcha';
+
+        $configPath = CONFIG . $config . '.php';
+
+        if (file_exists($configPath)) {
+            Configure::load($config, 'default');
+        }
     }
 
     /**

@@ -13,6 +13,7 @@ return [
             'bgColor' => null, // 图片背景色
             'lineColor' => null, // 干扰线颜色
             'textColor' => null, // 文字颜色
-        ]
+        ],
+        'CaptchaConfigureClass' => null, // 自定义配置类 string,必须实现JZaaa\CakeCaptcha\CaptchaConfigureInterface接口
     ]
 ];

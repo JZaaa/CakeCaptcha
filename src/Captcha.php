@@ -2,12 +2,22 @@
 
 namespace JZaaa\CakeCaptcha;
 
+use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\Session;
+use JZaaa\CakeCaptcha\Exception\CaptchaConfigureFailException;
+use ReflectionMethod;
 use SimpleCaptcha\Builder;
 
 class Captcha
 {
+
+    /**
+     * 验证码配置类
+     * @var null|string
+     */
+    protected $CaptchaConfigureClass = null;
 
     /**
      * session
@@ -138,6 +148,8 @@ class Captcha
                 $this->$key = $item;
             }
         }
+
+        $this->CaptchaConfigureClass = Configure::read('captcha.CaptchaConfigureClass');
     }
 
     /**
@@ -146,7 +158,7 @@ class Captcha
     protected function initCaptcha()
     {
         if (!$this->phraseBuilder) {
-            $this->phraseBuilder = Builder::buildPhrase((int) $this->length, $this->charset);
+            $this->phraseBuilder = Builder::buildPhrase((int)$this->length, $this->charset);
         }
         if (!$this->captchaBuilder) {
             $this->captchaBuilder = new Builder($this->phraseBuilder);
@@ -173,8 +185,16 @@ class Captcha
             $this->captchaBuilder->textColor = $this->textColor;
         }
 
+        if (!empty($this->CaptchaConfigureClass) && is_string($this->CaptchaConfigureClass)) {
+            $method = new ReflectionMethod($this->CaptchaConfigureClass, 'configure');
+            if ($method->isStatic() && $method->isPublic()) {
+                $this->CaptchaConfigureClass::configure($this->captchaBuilder);
+            } else {
+                throw new MethodNotAllowedException($this->CaptchaConfigureClass . '::configure method must be static and public.');
+            }
+        }
 
-        $this->captchaBuilder->build((int) $this->width,(int) $this->height);
+        $this->captchaBuilder->build((int)$this->width, (int)$this->height);
 
         $this->phrase = $this->captchaBuilder->phrase;
 
