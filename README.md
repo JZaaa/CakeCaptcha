@@ -1,13 +1,13 @@
 CakeCaptcha
 ============
-CakePHP 验证码插件，支持PHP8.1
+CakePHP 验证码插件，支持PHP7 - PHP8
 
 CakePHP3 请使用 [v1版本](https://github.com/JZaaa/CakeCaptcha/tree/v1)
 
 ## Requires
 - php: >=7.4
 - cakephp/cakephp: ^4.4
-- [s1syphos/php-simple-captcha: ^2.2.1](https://codeberg.org/S1SYPHOS/php-simple-captcha)
+- [jzaaa/php-simple-captcha: ^3.0.0](https://github.com/JZaaa/php-simple-captcha)
 
 ## 安装
 
