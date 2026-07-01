@@ -2,11 +2,9 @@
 
 namespace JZaaa\CakeCaptcha;
 
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\Session;
-use JZaaa\CakeCaptcha\Exception\CaptchaConfigureFailException;
 use ReflectionMethod;
 use SimpleCaptcha\Builder;
 
@@ -38,30 +36,6 @@ class Captcha
     protected $sensitive = false;
 
     /**
-     * 验证码图像宽
-     * @var int $width
-     */
-    protected $width = 150;
-
-    /**
-     * 验证码图像高
-     * @var int $height
-     */
-    protected $height = 40;
-
-    /**
-     * 验证码长度
-     * @var int $length
-     */
-    protected $length = 4;
-
-    /**
-     * 验证码字符集
-     * @var string $charset
-     */
-    protected $charset = '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ';
-
-    /**
      * @var Builder
      */
     protected $captchaBuilder;
@@ -78,29 +52,10 @@ class Captcha
     protected $phraseBuilder;
 
     /**
-     * 后期效果
-     * @var bool $applyPostEffects
+     * simple-captcha 图像生成配置
+     * @var CaptchaConfigs
      */
-    protected $applyPostEffects = true;
-
-
-    /**
-     * 图片背景色
-     * @var null|string|array $bgColor
-     */
-    protected $bgColor = null;
-
-    /**
-     * 文字颜色
-     * @var null|string|array $bgColor
-     */
-    protected $lineColor = null;
-
-    /**
-     * 文字颜色
-     * @var null|string|array $bgColor
-     */
-    protected $textColor = null;
+    protected $captchaConfigs;
 
     /**
      * Captcha constructor.
@@ -123,7 +78,7 @@ class Captcha
         }
 
         if (!$this->sensitive) {
-            $this->charset = strtolower($this->charset);
+            $this->captchaConfigs->setCharset(strtolower($this->captchaConfigs->getCharset()));
         }
     }
 
@@ -134,18 +89,26 @@ class Captcha
      */
     protected function configure($config)
     {
-        $ignore = ['captchaBuilder', 'phraseBuilder', 'session'];
+        $ignore = ['captchaBuilder', 'phraseBuilder', 'session', 'captchaConfigs'];
 
         $defaultConfig = Configure::read('captcha.config');
 
         if (is_array($defaultConfig)) {
             $config = array_merge($defaultConfig, $config);
         }
+        $this->captchaConfigs = isset($config['captchaConfigs']) && $config['captchaConfigs'] instanceof CaptchaConfigs
+            ? $config['captchaConfigs']
+            : new CaptchaConfigs();
         $classVars = array_keys(get_class_vars(get_class($this)));
 
         foreach ($config as $key => $item) {
             if (in_array($key, $classVars) && !in_array($key, $ignore)) {
                 $this->$key = $item;
+                continue;
+            }
+
+            if ($this->captchaConfigs->has($key)) {
+                $this->captchaConfigs->set($key, $item);
             }
         }
 
@@ -158,7 +121,7 @@ class Captcha
     protected function initCaptcha()
     {
         if (!$this->phraseBuilder) {
-            $this->phraseBuilder = Builder::buildPhrase((int)$this->length, $this->charset);
+            $this->phraseBuilder = $this->captchaConfigs->buildPhrase();
         }
         if (!$this->captchaBuilder) {
             $this->captchaBuilder = new Builder($this->phraseBuilder);
@@ -173,17 +136,8 @@ class Captcha
     {
         $this->initCaptcha();
 
-        $this->captchaBuilder->applyPostEffects = $this->applyPostEffects;
-
-        if ($this->bgColor) {
-            $this->captchaBuilder->bgColor = $this->bgColor;
-        }
-        if ($this->lineColor) {
-            $this->captchaBuilder->lineColor = $this->lineColor;
-        }
-        if ($this->textColor) {
-            $this->captchaBuilder->textColor = $this->textColor;
-        }
+        // 将 CaptchaConfigs 维护的配置同步到底层 SimpleCaptcha\Builder。
+        $this->captchaConfigs->applyToBuilder($this->captchaBuilder);
 
         if (!empty($this->CaptchaConfigureClass) && is_string($this->CaptchaConfigureClass)) {
             $method = new ReflectionMethod($this->CaptchaConfigureClass, 'configure');
@@ -194,7 +148,7 @@ class Captcha
             }
         }
 
-        $this->captchaBuilder->build((int)$this->width, (int)$this->height);
+        $this->captchaConfigs->buildBuilder($this->captchaBuilder);
 
         $this->phrase = $this->captchaBuilder->phrase;
 
@@ -204,6 +158,37 @@ class Captcha
             'phrase' => $this->phrase,
             'sensitive' => $this->sensitive,
         ];
+    }
+
+    /**
+     * 获取 simple-captcha 图像生成配置。
+     *
+     * @return CaptchaConfigs
+     */
+    public function getCaptchaConfigs()
+    {
+        return $this->captchaConfigs;
+    }
+
+    /**
+     * 设置 simple-captcha 图像生成配置。
+     *
+     * @param CaptchaConfigs $captchaConfigs
+     * @return $this
+     */
+    public function setCaptchaConfigs(CaptchaConfigs $captchaConfigs)
+    {
+        $this->captchaConfigs = $captchaConfigs;
+        if (!$this->sensitive) {
+            $this->captchaConfigs->setCharset(strtolower($this->captchaConfigs->getCharset()));
+        }
+
+        // 配置对象变更后重置生成器，确保 length/charset 等配置在下次生成时生效。
+        $this->phraseBuilder = null;
+        $this->captchaBuilder = null;
+        $this->phrase = null;
+
+        return $this;
     }
 
     /**
